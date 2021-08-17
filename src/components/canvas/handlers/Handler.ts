@@ -522,6 +522,10 @@ class Handler implements HandlerOptions {
 		if (onModified) {
 			onModified(obj);
 		}
+
+		if (!this.transactionHandler.active) {
+			this.transactionHandler.save('propschange');
+		}
 	};
 
 	/**

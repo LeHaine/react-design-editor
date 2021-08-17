@@ -15,6 +15,7 @@ export type TransactionType =
 	| 'skewed'
 	| 'group'
 	| 'ungroup'
+	| 'propschange'
 	| 'paste'
 	| 'bringForward'
 	| 'bringToFront'
