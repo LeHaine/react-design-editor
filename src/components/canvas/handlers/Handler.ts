@@ -1543,9 +1543,9 @@ class Handler implements HandlerOptions {
 				obj.left += diffLeft;
 				obj.top += diffTop;
 			}
-			if (obj.superType === 'element') {
-				obj.id = v4();
-			}
+			//if (obj.superType === 'element') {
+			obj.id = v4();
+			//	}
 			this.add(obj, false, true);
 			this.canvas.renderAll();
 		});
