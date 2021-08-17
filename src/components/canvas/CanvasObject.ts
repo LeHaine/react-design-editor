@@ -9,6 +9,7 @@ import {
 	Video,
 	Node,
 	Link,
+	Path,
 	CurvedLink,
 	OrthogonalLink,
 	Line,
@@ -66,6 +67,9 @@ const CanvasObject: CanvasObjectSchema = {
 	},
 	line: {
 		create: ({ points, ...option }: { points: any }) => new Line(points, option),
+	},
+	path: {
+		create: ({ path, ...option }: { path: any }) => new Path(path, option),
 	},
 	arrow: {
 		create: ({ points, ...option }: { points: any }) => new Arrow(points, option),
