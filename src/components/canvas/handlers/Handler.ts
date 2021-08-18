@@ -1556,6 +1556,7 @@ class Handler implements HandlerOptions {
 			this.canvas.renderAll();
 		});
 		this.objects = this.getObjects();
+		this.transactionHandler.updateState();
 		if (callback) {
 			callback(this.canvas);
 		}

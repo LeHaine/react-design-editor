@@ -105,6 +105,21 @@ class TransactionHandler {
 		}
 	};
 
+	public updateState = (canvasJSON?: any) => {
+		const { objects }: { objects: FabricObject[] } =
+			canvasJSON || this.handler.canvas.toJSON(this.handler.propertiesToInclude);
+		this.state = objects.filter(obj => {
+			if (obj.id === 'workarea') {
+				return false;
+			} else if (obj.id === 'grid') {
+				return false;
+			} else if (obj.superType === 'port') {
+				return false;
+			}
+			return true;
+		});
+	};
+
 	/**
 	 * Undo transaction
 	 *
