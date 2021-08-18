@@ -124,7 +124,17 @@ class Canvas extends Component<CanvasProps, IState> {
 	createObserver = () => {
 		this.resizeObserver = new ResizeObserver((entries: ResizeObserverEntry[]) => {
 			const { width = 0, height = 0 } = (entries[0] && entries[0].contentRect) || {};
-			this.handler.eventHandler.resize(width, height);
+
+			var newWidth = width;
+			if (this.props.width > 0 && newWidth > this.props.width) {
+				newWidth = this.props.width;
+			}
+
+			var newHeight = height;
+			if (this.props.height > 0 && newHeight > this.props.height) {
+				newHeight = this.props.height;
+			}
+			this.handler.eventHandler.resize(newWidth, newHeight);
 			if (!this.state.loaded) {
 				this.handleLoad();
 			}
