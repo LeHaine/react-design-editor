@@ -486,6 +486,12 @@ class Handler implements HandlerOptions {
 		}
 	};
 
+	public saveProps = () => {
+		if (!this.transactionHandler.active) {
+			this.transactionHandler.save('propschange');
+		}
+	};
+
 	/**
 	 * Set key pair by object
 	 * @param {FabricObject} obj
@@ -521,10 +527,6 @@ class Handler implements HandlerOptions {
 		const { onModified } = this;
 		if (onModified) {
 			onModified(obj);
-		}
-
-		if (!this.transactionHandler.active) {
-			this.transactionHandler.save('propschange');
 		}
 	};
 
