@@ -730,11 +730,14 @@ class Handler implements HandlerOptions {
 		if (obj.type === 'image') {
 			createdObj = this.addImage(newOption);
 		} else if (obj.type === 'group') {
-			// TODO...
-			// Group add function needs to be fixed
-			const objects = this.addGroup(newOption, centered, loaded);
-			const groupOption = Object.assign({}, newOption, { objects, name: 'New Group' });
-			createdObj = this.fabricObjects[obj.type].create(groupOption);
+			const actualGroup = newOption as FabricGroup;
+			const group = new fabric.Group([], actualGroup);
+
+			actualGroup.objects?.forEach(element => {
+				if (this.fabricObjects && element.type) group.add(this.fabricObjects[element.type].create(element));
+			});
+
+			if (this.fabricObjects) createdObj = group as any; // making to any so compiler doesn't complain about "dblclick", "superType" ...
 		} else {
 			createdObj = this.fabricObjects[obj.type].create(newOption);
 		}
@@ -1574,11 +1577,11 @@ class Handler implements HandlerOptions {
 				obj.left += diffLeft;
 				obj.top += diffTop;
 			}
-			if (obj.type === 'group') {
-				obj.objects.forEach((child: FabricObjectOption) => {
-					child.id = v4();
-				});
-			}
+			// if (obj.type === 'group') {
+			// 	obj.objects.forEach((child: FabricObjectOption) => {
+			// 		child.id = v4();
+			// 	});
+			// }
 			//if (obj.superType === 'element') {
 			obj.id = v4();
 			//	}
