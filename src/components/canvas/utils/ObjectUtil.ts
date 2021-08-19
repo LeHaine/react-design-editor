@@ -44,7 +44,10 @@ export interface FabricCanvasOption {
 	wrapperEl?: HTMLElement;
 }
 
-export type FabricCanvas<T extends any = fabric.Canvas> = T & FabricCanvasOption;
+export type FabricCanvas<T extends any = fabric.Canvas> = T &
+	FabricCanvasOption & {
+		on(eventName: any): T;
+	};
 
 export type FabricObjectOption<T extends any = fabric.IObjectOptions> = T & {
 	/**
