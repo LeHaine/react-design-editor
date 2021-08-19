@@ -1814,6 +1814,10 @@ class Handler implements HandlerOptions {
 		}
 	};
 
+	public canvasImageDataURL = (option = { name: 'New Image', format: 'png', quality: 1 }) => {
+		return this.canvas.toDataURL(option);
+	};
+
 	/**
 	 * Sets "angle" of an instance with centered rotation
 	 *
