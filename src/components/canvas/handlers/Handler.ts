@@ -794,6 +794,20 @@ class Handler implements HandlerOptions {
 		});
 	};
 
+	public addText = (
+		itemOption: any = {
+			text: 'Text',
+			width: 60,
+			height: 30,
+			fontSize: 32,
+			name: 'New Text',
+		},
+	) => {
+		const id = v4();
+		const option = Object.assign({}, itemOption, { id, type: 'i-text' });
+		this.add(option, true);
+	};
+
 	/**
 	 * Add iamge object
 	 * @param {FabricImage} obj
