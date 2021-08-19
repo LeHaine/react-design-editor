@@ -575,6 +575,17 @@ class Handler implements HandlerOptions {
 	};
 
 	/**
+	 * Set partial by id
+	 * @param {string} id
+	 * @param {FabricObjectOption} option
+	 * @returns
+	 */
+	public setByPartialId = (id: string, option: FabricObjectOption) => {
+		const findObject = this.findById(id);
+		this.setByPartial(findObject, option);
+	};
+
+	/**
 	 * Set shadow
 	 * @param {fabric.Shadow} option
 	 * @returns
@@ -1549,6 +1560,11 @@ class Handler implements HandlerOptions {
 				obj.left += diffLeft;
 				obj.top += diffTop;
 			}
+			if (obj.type === 'group') {
+				obj.objects.forEach((child: FabricObjectOption) => {
+					child.id = v4();
+				});
+			}
 			//if (obj.superType === 'element') {
 			obj.id = v4();
 			//	}
@@ -1567,6 +1583,8 @@ class Handler implements HandlerOptions {
 	 * Export json
 	 */
 	public exportJSON = () => this.canvas.toObject(this.propertiesToInclude).objects as FabricObject[];
+
+	public exportAllJSON = () => this.canvas.toJSON(this.propertiesToInclude);
 
 	/**
 	 * Active selection to group
