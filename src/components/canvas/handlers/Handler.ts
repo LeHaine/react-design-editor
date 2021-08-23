@@ -1376,7 +1376,7 @@ class Handler implements HandlerOptions {
 				findObject = obj;
 				return true;
 			}
-			if (obj.type === 'group' && obj.objects) {
+			if (obj.type === 'group' && obj._objects) {
 				const findChild = this.findChild(obj, id);
 				if (findChild) {
 					findObject = findChild;
@@ -1392,14 +1392,14 @@ class Handler implements HandlerOptions {
 		return findObject;
 	};
 
-	public findChild = (obj: FabricObject, id: string) => {
+	public findChild = (parent: FabricObject, id: string) => {
 		let findObject;
-		obj.objects.some((child: FabricObject) => {
+		parent._objects.some((child: FabricObject) => {
 			if (child.id === id) {
 				findObject = child;
 				return true;
 			}
-			if (child.type === 'group' && child.objects) {
+			if (child.type === 'group' && child._objects) {
 				const findChild = this.findChild(child, id);
 				if (findChild) {
 					findObject = findChild;
