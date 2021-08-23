@@ -1613,9 +1613,7 @@ class Handler implements HandlerOptions {
 				obj.top += diffTop;
 			}
 			if (obj.type === 'group') {
-				obj.objects.forEach((child: FabricObjectOption) => {
-					child.id = v4();
-				});
+				this.addIdToChildren(obj);
 			}
 			//if (obj.superType === 'element') {
 			obj.id = v4();
@@ -1629,6 +1627,15 @@ class Handler implements HandlerOptions {
 			callback(this.canvas);
 		}
 		return Promise.resolve(this.canvas);
+	};
+
+	private addIdToChildren = (obj: FabricObject | FabricObjectOption) => {
+		obj.objects?.forEach((child: FabricObject | FabricObjectOption) => {
+			if (child.type === 'group') {
+				this.addIdToChildren(child);
+			}
+			child.id = v4();
+		});
 	};
 
 	/**
