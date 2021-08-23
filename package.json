@@ -5,6 +5,7 @@
 	"main": "dist/react-design-editor.min.js",
 	"typings": "lib/index.d.ts",
 	"files": [
+		"dist",
 		"lib"
 	],
 	"scripts": {

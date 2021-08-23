@@ -730,23 +730,7 @@ class Handler implements HandlerOptions {
 		if (obj.type === 'image') {
 			createdObj = this.addImage(newOption);
 		} else if (obj.type === 'group') {
-			const children: FabricObject[] = [];
-			obj.objects?.forEach((element: FabricObject) => {
-				if (this.fabricObjects && element.type) {
-					const newOption = Object.assign(
-						{},
-						objectOption,
-						element,
-						{
-							container: this.container.id,
-							editable,
-						},
-						option,
-					);
-					children.push(this.fabricObjects[element.type].create(newOption));
-				}
-			});
-			createdObj = this.fabricObjects[obj.type].create({ ...newOption, objects: children });
+			createdObj = this.createWithChildren(obj, option);
 		} else {
 			createdObj = this.fabricObjects[obj.type].create(newOption);
 		}
@@ -790,6 +774,42 @@ class Handler implements HandlerOptions {
 			onAdd(createdObj);
 		}
 		return createdObj;
+	};
+
+	private createWithChildren = (obj: FabricObjectOption, option: any) => {
+		const { editable, objectOption } = this;
+		const newOption = Object.assign(
+			{},
+			objectOption,
+			obj,
+			{
+				container: this.container.id,
+				editable,
+			},
+			option,
+		);
+		const children: FabricObject[] = [];
+		obj.objects?.forEach((element: FabricObjectOption) => {
+			if (this.fabricObjects && element.type) {
+				const newOption = Object.assign(
+					{},
+					objectOption,
+					element,
+					{
+						container: this.container.id,
+						editable,
+					},
+					option,
+				);
+
+				if (element.type === 'group') {
+					children.push(this.createWithChildren(element, option));
+				} else {
+					children.push(this.fabricObjects[element.type].create(newOption));
+				}
+			}
+		});
+		return this.fabricObjects[obj.type].create({ ...newOption, objects: children });
 	};
 
 	/**
