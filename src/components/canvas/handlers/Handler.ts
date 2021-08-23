@@ -730,14 +730,23 @@ class Handler implements HandlerOptions {
 		if (obj.type === 'image') {
 			createdObj = this.addImage(newOption);
 		} else if (obj.type === 'group') {
-			const actualGroup = newOption as FabricGroup;
-			const group = new fabric.Group([], actualGroup);
-
-			actualGroup.objects?.forEach(element => {
-				if (this.fabricObjects && element.type) group.add(this.fabricObjects[element.type].create(element));
+			const children: FabricObject[] = [];
+			obj.objects?.forEach((element: FabricObject) => {
+				if (this.fabricObjects && element.type) {
+					const newOption = Object.assign(
+						{},
+						objectOption,
+						element,
+						{
+							container: this.container.id,
+							editable,
+						},
+						option,
+					);
+					children.push(this.fabricObjects[element.type].create(newOption));
+				}
 			});
-
-			if (this.fabricObjects) createdObj = group as any; // making to any so compiler doesn't complain about "dblclick", "superType" ...
+			createdObj = this.fabricObjects[obj.type].create({ ...newOption, objects: children });
 		} else {
 			createdObj = this.fabricObjects[obj.type].create(newOption);
 		}
@@ -1367,12 +1376,38 @@ class Handler implements HandlerOptions {
 				findObject = obj;
 				return true;
 			}
+			if (obj.type === 'group' && obj.objects) {
+				const findChild = this.findChild(obj, id);
+				if (findChild) {
+					findObject = findChild;
+					return true;
+				}
+			}
 			return false;
 		});
 		if (!exist) {
 			warning(true, 'Not found object by id.');
 			return null;
 		}
+		return findObject;
+	};
+
+	public findChild = (obj: FabricObject, id: string) => {
+		let findObject;
+		obj.objects.some((child: FabricObject) => {
+			if (child.id === id) {
+				findObject = child;
+				return true;
+			}
+			if (child.type === 'group' && child.objects) {
+				const findChild = this.findChild(child, id);
+				if (findChild) {
+					findObject = findChild;
+					return true;
+				}
+			}
+			return false;
+		});
 		return findObject;
 	};
 
@@ -1577,11 +1612,11 @@ class Handler implements HandlerOptions {
 				obj.left += diffLeft;
 				obj.top += diffTop;
 			}
-			// if (obj.type === 'group') {
-			// 	obj.objects.forEach((child: FabricObjectOption) => {
-			// 		child.id = v4();
-			// 	});
-			// }
+			if (obj.type === 'group') {
+				obj.objects.forEach((child: FabricObjectOption) => {
+					child.id = v4();
+				});
+			}
 			//if (obj.superType === 'element') {
 			obj.id = v4();
 			//	}
