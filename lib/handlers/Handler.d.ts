@@ -350,6 +350,7 @@ declare class Handler implements HandlerOptions {
      * @returns
      */
     add: (obj: FabricObjectOption, centered?: boolean, loaded?: boolean) => FabricObject<fabric.Object>;
+    private createWithChildren;
     /**
      * Add group object
      *
@@ -487,6 +488,7 @@ declare class Handler implements HandlerOptions {
      * @param {(canvas: FabricCanvas) => void} [callback]
      */
     importJSON: (json: any, callback?: (canvas: FabricCanvas) => void) => Promise<FabricCanvas<fabric.Canvas>>;
+    private addIdToChildren;
     /**
      * Export json
      */
