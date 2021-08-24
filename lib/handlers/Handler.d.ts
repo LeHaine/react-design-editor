@@ -487,13 +487,16 @@ declare class Handler implements HandlerOptions {
      * @param {*} json
      * @param {(canvas: FabricCanvas) => void} [callback]
      */
-    importJSON: (json: any, callback?: (canvas: FabricCanvas) => void) => Promise<FabricCanvas<fabric.Canvas>>;
+    importJSON: (json: any, callback?: (canvas: FabricCanvas) => void) => Promise<fabric.Canvas>;
     private addIdToChildren;
+    /**
+     * Export only fabric objects as json.
+     */
+    exportObjectsAsJSON: () => FabricObject<fabric.Object>[];
     /**
      * Export json
      */
-    exportJSON: () => FabricObject<fabric.Object>[];
-    exportAllJSON: () => string;
+    exportJSON: () => string;
     /**
      * Active selection to group
      * @returns
