@@ -1642,6 +1642,15 @@ class Handler implements HandlerOptions {
 					this.addIdToChildren(obj);
 				}
 				obj.id = v4();
+
+				const option: any = {
+					hasControls: obj.selectable,
+					hasBorders: obj.selectable,
+					lockMovementX: !obj.selectable,
+					lockMovementY: !obj.selectable,
+					hoverCursor: !obj.selectable ? 'pointer' : 'move',
+				};
+				Object.assign(obj, option);
 			},
 		);
 	};
