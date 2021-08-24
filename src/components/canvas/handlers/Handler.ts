@@ -801,9 +801,10 @@ class Handler implements HandlerOptions {
 					},
 					option,
 				);
-
 				if (element.type === 'group') {
 					children.push(this.createWithChildren(element, option));
+				} else if (element.type === 'image') {
+					children.push(this.addImage(element as FabricImage));
 				} else {
 					children.push(this.fabricObjects[element.type].create(newOption));
 				}
