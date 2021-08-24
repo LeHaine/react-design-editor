@@ -1590,13 +1590,10 @@ class Handler implements HandlerOptions {
 	 * @param {(canvas: FabricCanvas) => void} [callback]
 	 */
 	public importJSON = async (json: any, callback?: (canvas: FabricCanvas) => void) => {
-		if (typeof json === 'string') {
-			json = JSON.parse(json);
-		}
 		let prevLeft = 0;
 		let prevTop = 0;
 		this.canvas.setBackgroundColor(this.canvasOption.backgroundColor, this.canvas.renderAll.bind(this.canvas));
-		const workareaExist = json.filter((obj: FabricObjectOption) => obj.id === 'workarea');
+		const workareaExist = json.objects.filter((obj: FabricObjectOption) => obj.id === 'workarea');
 		if (!this.workarea) {
 			this.workareaHandler.initialize();
 		}
@@ -1613,43 +1610,41 @@ class Handler implements HandlerOptions {
 			await this.workareaHandler.setImage(workarea.src, true);
 			this.workarea.setCoords();
 		}
-		json.forEach((obj: FabricObjectOption) => {
-			if (obj.id === 'workarea') {
-				return;
-			}
-			const canvasWidth = this.canvas.getWidth();
-			const canvasHeight = this.canvas.getHeight();
-			const { width, height, scaleX, scaleY, layout, left, top } = this.workarea;
-			if (layout === 'fullscreen') {
-				const leftRatio = canvasWidth / (width * scaleX);
-				const topRatio = canvasHeight / (height * scaleY);
-				obj.left *= leftRatio;
-				obj.top *= topRatio;
-				obj.scaleX *= leftRatio;
-				obj.scaleY *= topRatio;
-			} else {
-				const diffLeft = left - prevLeft;
-				const diffTop = top - prevTop;
-				obj.left += diffLeft;
-				obj.top += diffTop;
-			}
-			if (obj.type === 'group') {
-				this.addIdToChildren(obj);
-			}
-			//if (obj.superType === 'element') {
-			obj.id = v4();
-			//	}
-			this.add(obj, false, true);
-			this.canvas.renderAll();
-		});
-		this.objects = this.getObjects();
-		this.transactionHandler.updateState();
-		if (callback) {
-			callback(this.canvas);
-		}
-		return Promise.resolve(this.canvas);
-	};
 
+		return this.canvas.loadFromJSON(
+			json,
+			() => {
+				this.canvas.renderAll();
+				this.objects = this.getObjects();
+				this.transactionHandler.updateState();
+				if (callback) {
+					callback(this.canvas);
+				}
+			},
+			(_o: any, obj: FabricObject) => {
+				const canvasWidth = this.canvas.getWidth();
+				const canvasHeight = this.canvas.getHeight();
+				const { width, height, scaleX, scaleY, layout, left, top } = this.workarea;
+				if (layout === 'fullscreen') {
+					const leftRatio = canvasWidth / (width * scaleX);
+					const topRatio = canvasHeight / (height * scaleY);
+					obj.left *= leftRatio;
+					obj.top *= topRatio;
+					obj.scaleX *= leftRatio;
+					obj.scaleY *= topRatio;
+				} else {
+					const diffLeft = left - prevLeft;
+					const diffTop = top - prevTop;
+					obj.left += diffLeft;
+					obj.top += diffTop;
+				}
+				if (obj.type === 'group') {
+					this.addIdToChildren(obj);
+				}
+				obj.id = v4();
+			},
+		);
+	};
 	private addIdToChildren = (obj: FabricObject | FabricObjectOption) => {
 		obj.objects?.forEach((child: FabricObject | FabricObjectOption) => {
 			if (child.type === 'group') {
@@ -1660,11 +1655,14 @@ class Handler implements HandlerOptions {
 	};
 
 	/**
+	 * Export only fabric objects as json.
+	 */
+	public exportObjectsAsJSON = () => this.canvas.toObject(this.propertiesToInclude).objects as FabricObject[];
+
+	/**
 	 * Export json
 	 */
-	public exportJSON = () => this.canvas.toObject(this.propertiesToInclude).objects as FabricObject[];
-
-	public exportAllJSON = () => this.canvas.toJSON(this.propertiesToInclude);
+	public exportJSON = () => this.canvas.toJSON(this.propertiesToInclude);
 
 	/**
 	 * Active selection to group
