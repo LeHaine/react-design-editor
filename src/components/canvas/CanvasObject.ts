@@ -45,6 +45,9 @@ const CanvasObject: CanvasObjectSchema = {
 	circle: {
 		create: (option: any) => new fabric.Circle(option),
 	},
+	ellipse: {
+		create: (option: any) => new fabric.Ellipse(option),
+	},
 	rect: {
 		create: (option: any) => new fabric.Rect(option),
 	},
