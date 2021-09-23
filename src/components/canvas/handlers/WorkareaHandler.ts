@@ -19,6 +19,7 @@ class WorkareaHandler {
 	 */
 	public initialize() {
 		const { workareaOption } = this.handler;
+
 		const image = new Image(workareaOption.width, workareaOption.height);
 		image.width = workareaOption.width;
 		image.height = workareaOption.height;
@@ -26,6 +27,9 @@ class WorkareaHandler {
 		this.handler.canvas.add(this.handler.workarea);
 		this.handler.objects = this.handler.getObjects();
 		this.handler.canvas.centerObject(this.handler.workarea);
+
+		this.handler.canvas.clipPath = this.handler.workarea;
+
 		this.handler.canvas.renderAll();
 	}
 
