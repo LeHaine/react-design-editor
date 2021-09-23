@@ -28,7 +28,8 @@ class WorkareaHandler {
 		this.handler.objects = this.handler.getObjects();
 		this.handler.canvas.centerObject(this.handler.workarea);
 
-		this.handler.canvas.clipPath = this.handler.workarea;
+		const rect = new fabric.Rect({ width: workareaOption.width, height: workareaOption.height });
+		this.handler.canvas.clipPath = rect;
 
 		this.handler.canvas.renderAll();
 	}
