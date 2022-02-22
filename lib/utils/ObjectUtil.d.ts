@@ -212,7 +212,7 @@ export interface FabricElement extends FabricObject<fabric.Rect> {
      */
     setSource: (source: any) => void;
 }
-export declare type WorkareaLayout = 'fixed' | 'responsive' | 'fullscreen';
+export declare type WorkareaLayout = 'fixed' | 'responsive' | 'fullscreen' | 'none';
 export interface WorkareaOption {
     /**
      * Image URL
