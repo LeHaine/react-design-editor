@@ -1632,7 +1632,7 @@ class Handler implements HandlerOptions {
 					obj.top *= topRatio;
 					obj.scaleX *= leftRatio;
 					obj.scaleY *= topRatio;
-				} else {
+				} else if (layout !== 'none') {
 					const diffLeft = left - prevLeft;
 					const diffTop = top - prevTop;
 					obj.left += diffLeft;
